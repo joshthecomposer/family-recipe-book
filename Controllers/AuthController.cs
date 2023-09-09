@@ -6,10 +6,17 @@ namespace MyApp.Controllers;
 [Route("api/auth")]
 public class AuthController : ControllerBase
 {
-    [HttpGet("test")]
-    public async Task<ActionResult> Test()
+    [HttpPost("register")]
+    public async Task<ActionResult> Register()
     {
         await Task.Delay(1);
-        return Ok("Hello, world!");
+        return Ok("Register");
+    }
+
+    [HttpPost("login")]
+    public async Task<ActionResult> Login()
+    {
+        await Task.Delay(1);
+        return Ok("Login");
     }
 }
