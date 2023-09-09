@@ -1,0 +1,1 @@
+dotnet publish -c Release -o ../FRBuild --self-contained true -r linux-x64
