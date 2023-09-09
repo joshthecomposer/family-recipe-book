@@ -7,11 +7,11 @@ builder.Services.AddControllers();
 string connectionString;
 if (builder.Environment.IsProduction())
 {
-    connectionString = builder.Configuration.GetConnectionString("LocalConnection")!;
+    connectionString = builder.Configuration.GetConnectionString("AwsConnection")!;
 }
 else
 {
-    connectionString = builder.Configuration.GetConnectionString("AwsConnection")!;
+    connectionString = builder.Configuration.GetConnectionString("LocalConnection")!;
 }
 
 builder.Services.AddDbContext<DBContext>(options =>
