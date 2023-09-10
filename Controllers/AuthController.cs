@@ -25,7 +25,7 @@ public class AuthController : ControllerBase
         {
             try
             {
-                 await _userService.CreateAsync(user);
+                await _userService.CreateAsync(user);
                 return StatusCode(201, "Successfully registered, please login.");
             }
             catch
