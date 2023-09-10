@@ -38,6 +38,7 @@ public class UserService : IUserService
         if (user == null) return null;
 
         user.IsActive = false;
+        user.DisabledAt = DateTime.UtcNow;
         await _db.SaveChangesAsync();
         return user;
     }
