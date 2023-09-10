@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using MyApp.DataStorage;
+using MyApp.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,8 @@ else
 {
     connectionString = builder.Configuration.GetConnectionString("LocalConnection")!;
 }
+
+builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddDbContext<DBContext>(options =>
 {
