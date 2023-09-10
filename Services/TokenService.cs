@@ -84,18 +84,26 @@ public class TokenService : ITokenService
             Value = GenerateRefreshToken(),
             UserId = userId
         };
-
-        //TODO: Error handling for this.
-        string jwt = GenerateAccessToken(userId);
-
         try
         {
+            string jwt = GenerateAccessToken(userId);
             await _db.RefreshTokens.AddAsync(rft);
             await _db.SaveChangesAsync();
             return new TokensDTO(rft, jwt);
         }
+        catch (InvalidOperationException ex)
+        {
+            Console.WriteLine(ex.Message);
+            return null;
+        }
+        catch (DbUpdateException ex)
+        {
+            Console.WriteLine(ex.Message);
+            return null;
+        }
         catch
         {
+            Console.WriteLine("Unknown error in CreateTokensDTO");
             return null;
         }
     }
