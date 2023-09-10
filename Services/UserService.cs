@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using MyApp.DataStorage;
 using MyApp.DTOs.UserDTOs;
 using MyApp.Models;
@@ -41,5 +42,18 @@ public class UserService : IUserService
         user.DisabledAt = DateTime.UtcNow;
         await _db.SaveChangesAsync();
         return user;
+    }
+
+    public async Task<UserDTO?> ValidateUserPassword(LoginUser loginUser)
+    {
+        User? check = await _db.Users.Where(u => u.Email == loginUser.Email).FirstOrDefaultAsync();
+
+        if (check == null) return null;
+
+        PasswordHasher<LoginUser> hasher = new();
+
+        if (hasher.VerifyHashedPassword(loginUser, check.Password, loginUser.Password) == 0) return null;
+
+        return new UserDTO(check);
     }
 }

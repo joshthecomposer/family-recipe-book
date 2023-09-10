@@ -20,4 +20,6 @@ public class User : BaseEntity
     [NotMapped]
     [Compare("Password")]
     public string Confirm { get; set; }
+
+    public List<RefreshToken> RefreshTokens { get; set; } = new();
 }
