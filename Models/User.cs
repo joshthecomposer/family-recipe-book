@@ -1,5 +1,6 @@
 #pragma warning disable 8618
 using System.ComponentModel.DataAnnotations;
+using MyApp.CustomAnnotations;
 
 namespace MyApp.Models;
 public class User : BaseEntity
@@ -9,6 +10,7 @@ public class User : BaseEntity
     public string? FirstName { get; set; }
     public string? LastName { get; set; }
     [Required]
+    [UniqueEmail]
     [EmailAddress]
     public string Email { get; set; }
     [Required]

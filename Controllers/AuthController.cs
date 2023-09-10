@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using MyApp.DataStorage;
 using MyApp.Models;
+using MyApp.Services;
 
 namespace MyApp.Controllers;
 
@@ -8,11 +10,11 @@ namespace MyApp.Controllers;
 [Route("api/auth")]
 public class AuthController : ControllerBase
 {
-    private readonly DBContext _db;
+    private readonly IUserService _userService;
 
-    public AuthController(DBContext db)
+    public AuthController(IUserService userService)
     {
-        _db = db;
+        _userService = userService;
     }
 
     [HttpPost("register")]
@@ -22,8 +24,7 @@ public class AuthController : ControllerBase
         {
             try
             {
-                await _db.Users.AddAsync(user);
-                await _db.SaveChangesAsync();
+                await _userService.CreateAsync(user);
                 return user;
             }
             catch
@@ -34,41 +35,10 @@ public class AuthController : ControllerBase
         return BadRequest(ModelState);
     }
 
-    [HttpGet("test/{id}")]
-    public async Task<ActionResult<User>> TestGetById(int id)
-    {
-        User? check = await _db.Users.FindAsync(id);
-        if (check != null)
-        {
-            return check;
-        }
-        return NotFound("User not found.");
-    }
-
     [HttpPost("login")]
     public async Task<ActionResult> Login()
     {
         await Task.Delay(1);
         return Ok("Login");
-    }
-
-    [HttpDelete("{id}")]
-    public async Task<ActionResult<User>> DeactivateUserByIdAsync(int id)
-    {
-        User? check = await _db.Users.FindAsync(id);
-        if (check != null)
-        {
-            try
-            {
-                check.IsActive = false;
-                await _db.SaveChangesAsync();
-                return check;
-            }
-            catch
-            {
-                return StatusCode(500, "Error deactivating user, please try again.");
-            }
-        }
-        return NotFound("User not found.");
     }
 }
