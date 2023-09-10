@@ -32,7 +32,7 @@ public class TokenService : ITokenService
 
     public string GenerateAccessToken(int id)
     {
-        string? encKey = _config["AppSecrets:JWTSecret"];
+        string? encKey = _config["Jwt:SecretKey"];
         if (string.IsNullOrEmpty(encKey) || encKey.Length < 16)
         {
             throw new InvalidOperationException("Jwt Secret is Invalid or Missing.");
@@ -47,6 +47,8 @@ public class TokenService : ITokenService
             {
                 new Claim(ClaimTypes.Name, Convert.ToString(id))
             }),
+            Audience = _config["Jwt:Audience"],
+            Issuer = _config["Jwt:Issuer"],
             Expires = DateTime.UtcNow.AddHours(2),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
             SecurityAlgorithms.HmacSha256Signature)
@@ -77,7 +79,7 @@ public class TokenService : ITokenService
         }
     }
 
-    public async Task<TokensDTO?> CreateTokensDTO(int userId)
+    public async Task<TokensDTO?> CreateTokensDTOAsync(int userId)
     {
         RefreshToken rft = new()
         {
@@ -106,5 +108,25 @@ public class TokenService : ITokenService
             Console.WriteLine("Unknown error in CreateTokensDTO");
             return null;
         }
+    }
+
+    public async Task<TokensDTO> DoRefreshActionAsync(string rft)
+    {
+        await Task.Delay(1);
+        throw new NotImplementedException();
+    }
+
+    public async Task<int> ValidateAccessTokenAsync(string jwt)
+    {
+        //return a userId from the token
+        await Task.Delay(1);
+        throw new NotImplementedException();
+    }
+
+    public async Task<int> ValidateRefreshTokenAsync(string rft)
+    {
+        //return a userId for a token
+        await Task.Delay(1);
+        throw new NotImplementedException();
     }
 }

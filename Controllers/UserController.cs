@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyApp.DataStorage;
 using MyApp.DTOs.UserDTOs;
@@ -6,6 +7,7 @@ using MyApp.Services;
 
 namespace MyApp.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/users")]
 public class UserController : ControllerBase

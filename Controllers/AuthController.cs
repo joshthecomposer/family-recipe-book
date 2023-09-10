@@ -61,7 +61,7 @@ public class AuthController : ControllerBase
             return StatusCode(500, "Error updating user tokens, try again."); 
         }
 
-        TokensDTO? tokens = await _tokenService.CreateTokensDTO(validUser.UserId);
+        TokensDTO? tokens = await _tokenService.CreateTokensDTOAsync(validUser.UserId);
 
         if (tokens == null) 
         { 
