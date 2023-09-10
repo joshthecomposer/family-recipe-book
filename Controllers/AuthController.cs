@@ -70,4 +70,20 @@ public class AuthController : ControllerBase
 
         return Ok(tokens);
     }
+
+    [HttpPost("refresh")]
+    public async Task<ActionResult<TokensDTO>> DoRefreshActionAsync(RefreshRequestDTO rft)
+    {
+        int checkValue = await _tokenService.ValidateRefreshTokenAsync(rft.Rft);
+        if (checkValue < 1)
+        {
+            return Unauthorized("Token not found.");
+        }
+        TokensDTO? tokens = await _tokenService.CreateTokensDTOAsync(checkValue);
+        if (tokens == null)
+        {
+            return StatusCode(500, "Something went wrong creating the TokensDTO");
+        }
+        return tokens;
+    }
 }

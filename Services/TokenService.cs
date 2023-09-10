@@ -9,6 +9,8 @@ using System.Security.Cryptography;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using System.Net.Http.Headers;
+using System.Text.Json;
 
 namespace MyApp.Services;
 public class TokenService : ITokenService
@@ -86,9 +88,11 @@ public class TokenService : ITokenService
             Value = GenerateRefreshToken(),
             UserId = userId
         };
+        //TODO: Put this in a transaction.
         try
         {
             string jwt = GenerateAccessToken(userId);
+            await DeactivateTokensForUserAsync(userId);
             await _db.RefreshTokens.AddAsync(rft);
             await _db.SaveChangesAsync();
             return new TokensDTO(rft, jwt);
@@ -116,17 +120,83 @@ public class TokenService : ITokenService
         throw new NotImplementedException();
     }
 
-    public async Task<int> ValidateAccessTokenAsync(string jwt)
+    public int GetClaimFromHeaderValue(HttpRequest request)
     {
-        //return a userId from the token
-        await Task.Delay(1);
-        throw new NotImplementedException();
+        AuthenticationHeaderValue? header = null;
+        try
+        {
+            header = AuthenticationHeaderValue.Parse(request.Headers["Authorization"]);
+
+        }
+        catch (FormatException)
+        {
+            Console.WriteLine("Authorization header is malformed.");
+            return -1;
+        }
+        catch (ArgumentNullException)
+        {
+            Console.WriteLine("Authorization header is missing.");
+            return -1;
+        }
+        string? token = ExtractTokenFromHeaders(header);
+        if (token == null)
+        {
+            return -1;
+        }
+        int? claim = GetClaimFromAccessToken(token);
+        if (claim == null)
+        {
+            return -1;
+        }
+        return (int)claim;
+    }
+
+    static string? ExtractTokenFromHeaders(AuthenticationHeaderValue header)
+    {
+        if (string.IsNullOrEmpty(header.Parameter))
+        {
+            return null;
+        }
+        return header.Parameter;
+    }
+
+    static int? GetClaimFromAccessToken(string jwt)
+    {
+        JwtSecurityTokenHandler handler = new();
+        JwtSecurityToken? token = handler.ReadJwtToken(jwt);
+        if (token == null)
+        {
+            Console.WriteLine("Handler failed to read token in GetClaimFromAccessToken");
+            return null;
+        }
+        var claims = token.Claims;
+        Claim? userIdClaim = claims.Where(c => c.Type == "unique_name").FirstOrDefault();
+
+        if (userIdClaim == null)
+        {
+            Console.WriteLine("Failed to extract userIdClaim from token.");
+            return null;
+        }
+        if (int.TryParse(userIdClaim.Value, out int id))
+        {
+            return id;
+        }
+        else
+        {
+            Console.WriteLine("Failed to parse int from claim.value");
+            return null;
+        }
     }
 
     public async Task<int> ValidateRefreshTokenAsync(string rft)
     {
-        //return a userId for a token
-        await Task.Delay(1);
-        throw new NotImplementedException();
+        RefreshToken? refreshToken = await _db.RefreshTokens
+                                        .Where(t => t.Value == rft && t.Expiry > DateTime.UtcNow)
+                                        .SingleOrDefaultAsync();
+        if (refreshToken == null)
+        {
+            return -1;
+        }
+        return refreshToken.UserId;
     }
 }

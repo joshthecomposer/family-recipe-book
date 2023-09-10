@@ -42,7 +42,7 @@ builder.Services.AddAuthentication(options =>
 	.AddJwtBearer("Bearer", options =>
 	{
         //TODO: reenable this
-		options.RequireHttpsMetadata = false;
+		options.RequireHttpsMetadata = true;
 		options.SaveToken = false;
 		options.TokenValidationParameters = new TokenValidationParameters
 		{
