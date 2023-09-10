@@ -16,6 +16,7 @@ else
 }
 
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ITokenService, TokenService>();
 
 builder.Services.AddDbContext<DBContext>(options =>
 {

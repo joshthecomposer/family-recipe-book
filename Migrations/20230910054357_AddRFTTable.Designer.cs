@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyApp.DataStorage;
 
@@ -10,9 +11,11 @@ using MyApp.DataStorage;
 namespace MyApp.Migrations
 {
     [DbContext(typeof(DBContext))]
-    partial class DBContextModelSnapshot : ModelSnapshot
+    [Migration("20230910054357_AddRFTTable")]
+    partial class AddRFTTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -29,9 +32,6 @@ namespace MyApp.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<DateTime?>("DisabledAt")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime>("Expiry")
                         .HasColumnType("datetime(6)");
 
                     b.Property<bool>("IsActive")
