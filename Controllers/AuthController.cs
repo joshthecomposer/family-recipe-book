@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MyApp.DataStorage;
+using MyApp.DTOs.UserDTOs;
 using MyApp.Models;
 using MyApp.Services;
 
@@ -18,13 +19,13 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("register")]
-    public async Task<ActionResult<User>> Register(User user)
+    public async Task<ActionResult> Register(User user)
     {
         if (ModelState.IsValid)
         {
             try
             {
-                await _userService.CreateAsync(user);
+                 await _userService.CreateAsync(user);
                 return StatusCode(201, "Successfully registered, please login.");
             }
             catch
@@ -36,9 +37,13 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("login")]
-    public async Task<ActionResult> Login()
+    public async Task<ActionResult> Login(LoginUser loginUser)
     {
         await Task.Delay(1);
-        return Ok("Login");
+        if (ModelState.IsValid)
+        {
+
+        }
+        return BadRequest();
     }
 }

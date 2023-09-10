@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using MyApp.DataStorage;
+using MyApp.DTOs.UserDTOs;
 using MyApp.Models;
 using MyApp.Services;
 
@@ -16,8 +17,26 @@ public class UserController : ControllerBase
         _userService = userService;
     }
 
+    [HttpGet("{id}")]
+    public async Task<ActionResult<UserDTO>> GetByIdAsync(int id)
+    {
+        try
+        {
+            UserDTO? user = await _userService.GetByIdAsync(id);
+
+            if (user == null) return NotFound("User not found.");
+
+            return user;
+        }
+        catch
+        {
+            return StatusCode(500, "Error fetching user, please try again.");
+        }
+
+    }
+
     [HttpDelete("{id}")]
-    public async Task<ActionResult<User>> DeactivateUserByIdAsync(int id)
+    public async Task<ActionResult> DeactivateUserByIdAsync(int id)
     {
         try
         {
@@ -26,12 +45,10 @@ public class UserController : ControllerBase
             {
                 return NotFound("User not found.");
             }
-
-            return Ok(user);
+            return Ok();
         }
         catch
         {
-            // You might log the exception here
             return StatusCode(500, "Error deactivating user, please try again.");
         }
     }
