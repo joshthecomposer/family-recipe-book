@@ -1,5 +1,6 @@
 #pragma warning disable 8618
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using MyApp.CustomAnnotations;
 
 namespace MyApp.Models;
@@ -16,6 +17,7 @@ public class User : BaseEntity
     [Required]
     [MinLength(8)]
     public string Password { get; set; }
+    [NotMapped]
     [Compare("Password")]
     public string Confirm { get; set; }
 }
