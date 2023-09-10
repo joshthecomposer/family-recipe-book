@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using MyApp.DataStorage;
 using MyApp.Models;
 
@@ -13,6 +14,8 @@ public class UserService : IUserService
 
     public async Task<User> CreateAsync(User user)
     {
+        PasswordHasher<User> hasher = new();
+        user.Password = hasher.HashPassword(user, user.Password);
         _db.Users.Add(user);
         await _db.SaveChangesAsync();
         return user;
