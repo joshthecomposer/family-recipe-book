@@ -9,10 +9,12 @@
       }
     },
     "ConnectionStrings": {
-      "LocalConnection":"Server=localhost;Database=project_r_db;Uid=root;Pwd=root;"
+      "LocalConnection":"Server=localhost;Database=family_recipe_db;Uid=root;Pwd=root;"
     },
-    "AppSecrets" :{
-		"JWTSecret": "<find this value in 1Password Dev Tools Vault>"
-	}
+    "Jwt": {
+        "Issuer": "Local",
+        "Audience": "Local",
+        "SecretKey": "<Stored on 1Password>"
+    }
 }
 ```  
