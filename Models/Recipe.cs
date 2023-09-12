@@ -16,5 +16,8 @@ public class Recipe : BaseEntity
     //Associations
     public int UserId { get; set; }
     public User User { get; set; }
+
+    public List<Ingredient> Ingredients { get; set; } = new();
+
     //TODO: 1 to 1 relationship preview photo for the recipe.
 }
