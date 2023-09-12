@@ -7,6 +7,7 @@ public class DBContext : DbContext
 {
     public DbSet<User> Users { get; set; }
     public DbSet<RefreshToken> RefreshTokens { get; set; }
+    public DbSet<Recipe> Recipes { get; set; }
 
     public DBContext(DbContextOptions options) : base(options) { }
 
@@ -23,5 +24,7 @@ public class DBContext : DbContext
         modelBuilder.Entity<RefreshToken>(entity => {
         entity.HasIndex(e => e.Value).IsUnique();
         });
+
+        modelBuilder.Entity<Recipe>().HasQueryFilter(u => u.IsActive);
     }
 }
