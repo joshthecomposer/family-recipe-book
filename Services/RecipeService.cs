@@ -1,4 +1,5 @@
 using MyApp.DataStorage;
+using MyApp.DTOs.RecipeDTOs;
 using MyApp.Models;
 
 namespace MyApp.Services;
@@ -11,10 +12,15 @@ public class RecipeService :IRecipeService
         _db = db;
     }
 
-    public async Task CreateAsync(Recipe recipe)
+    public async Task CreateAsync(RecipeNoUserIdDTO recipe, int userId)
     {
-        //TODO: error catching
-        await _db.Recipes.AddAsync(recipe);
+        Recipe ingoing = new()
+        {
+            Name = recipe.Name,
+            Description = recipe.Description,
+            UserId = userId
+        };
+        await _db.Recipes.AddAsync(ingoing);
         await _db.SaveChangesAsync();
     }
 }

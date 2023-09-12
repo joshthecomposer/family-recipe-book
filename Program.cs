@@ -20,6 +20,7 @@ else
 
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IRecipeService, RecipeService>();
 
 builder.Services.AddDbContext<DBContext>(options =>
 {
