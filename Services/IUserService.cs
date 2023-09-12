@@ -8,4 +8,5 @@ public interface IUserService
     Task<User?> DeactivateUserByIdAsync(int id);
     Task<UserDTO?> GetByIdAsync(int id);
     Task<UserDTO?> ValidateUserPassword(LoginUser loginUser);
+    Task<UserDTO?> UpdatePasswordAsync(PasswordUpdateDTO passUpdate, int userId);
 }

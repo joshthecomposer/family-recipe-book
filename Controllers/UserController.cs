@@ -1,5 +1,6 @@
 using System.Net.Http.Headers;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MyApp.DataStorage;
 using MyApp.DTOs.UserDTOs;
@@ -25,7 +26,7 @@ public class UserController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<UserDTO>> GetByIdAsync(int id)
     {
-        var claim = _tokenService.GetClaimFromHeaderValue(Request);
+        int claim = _tokenService.GetClaimFromHeaderValue(Request);
         if (claim < 1 || claim !=id)
         {
             return NotFound("Invalid Claim.");
@@ -42,13 +43,36 @@ public class UserController : ControllerBase
         {
             return StatusCode(500, "Error fetching user, please try again.");
         }
+    }
 
+    [HttpPost("update_password")]
+    public async Task<ActionResult<UserDTO?>> UpdatePasswordAsync(PasswordUpdateDTO passUpdate)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+        int claim = _tokenService.GetClaimFromHeaderValue(Request);
+        if (claim < 1)
+        {
+            return NotFound("Invalid Claim.");
+        }
+        UserDTO? updatedUser = null;
+        try
+        {
+            updatedUser = await _userService.UpdatePasswordAsync(passUpdate, claim);
+            return updatedUser;
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
 
     [HttpDelete("{id}")]
     public async Task<ActionResult> DeactivateUserByIdAsync()
     {
-        var claim = _tokenService.GetClaimFromHeaderValue(Request);
+        int claim = _tokenService.GetClaimFromHeaderValue(Request);
         if (claim < 1)
         {
             return NotFound("Invalid Claim.");

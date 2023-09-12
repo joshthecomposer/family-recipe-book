@@ -56,4 +56,28 @@ public class UserService : IUserService
 
         return new UserDTO(check);
     }
+
+    public async Task<UserDTO?> UpdatePasswordAsync(PasswordUpdateDTO passUpdate, int userId)
+    {
+        User? oldUser = await _db.Users.FindAsync(userId);
+        if (oldUser == null)
+        {
+            throw new Exception("User not found.");
+        }
+        PasswordHasher<User> hasher = new();
+        if (hasher.VerifyHashedPassword(oldUser, oldUser.Password, passUpdate.PrevPassword) == 0)
+        {
+            throw new Exception("Previous Password was wrong.");
+        }
+        oldUser.Password = hasher.HashPassword(oldUser, passUpdate.NewPassword);
+        try
+        {
+            await _db.SaveChangesAsync();
+            return new UserDTO(oldUser);
+        }
+        catch
+        {
+            throw new Exception("Database error, try again.");
+        }
+    }
 }
