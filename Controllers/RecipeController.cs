@@ -41,6 +41,5 @@ public class RecipeController : ControllerBase
         {
             return StatusCode(500, "Error saving new recipe.");
         }
-
     }
 }
