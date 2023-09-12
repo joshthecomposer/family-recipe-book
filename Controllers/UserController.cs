@@ -23,11 +23,11 @@ public class UserController : ControllerBase
         _tokenService = tokenService;
     }
 
-    [HttpGet("{id}")]
-    public async Task<ActionResult<UserDTO>> GetByIdAsync(int id)
+    [HttpGet]
+    public async Task<ActionResult<UserDTO>> GetByIdAsync()
     {
         int claim = _tokenService.GetClaimFromHeaderValue(Request);
-        if (claim < 1 || claim !=id)
+        if (claim < 1)
         {
             return NotFound("Invalid Claim.");
         }
@@ -45,7 +45,7 @@ public class UserController : ControllerBase
         }
     }
 
-    [HttpPost("update_password")]
+    [HttpPatch("update_password")]
     public async Task<ActionResult<UserDTO?>> UpdatePasswordAsync(PasswordUpdateDTO passUpdate)
     {
         if (!ModelState.IsValid)
@@ -69,9 +69,10 @@ public class UserController : ControllerBase
         }
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete]
     public async Task<ActionResult> DeactivateUserByIdAsync()
     {
+        //TODO: Require password for deactivation.
         int claim = _tokenService.GetClaimFromHeaderValue(Request);
         if (claim < 1)
         {
