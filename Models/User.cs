@@ -22,4 +22,5 @@ public class User : BaseEntity
     public string Confirm { get; set; }
 
     public List<RefreshToken> RefreshTokens { get; set; } = new();
+    public List<Recipe> Recipes { get; set; } = new();
 }
