@@ -7,7 +7,7 @@ using MyApp.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+// builder.Services.AddControllers();
 string connectionString;
 if (builder.Environment.IsProduction())
 {
@@ -58,10 +58,25 @@ builder.Services.AddAuthentication(options =>
 		};
 	});
 
+builder.Services.AddControllersWithViews();
+builder.Services.AddCors();
+
 var app = builder.Build();
+
+app.UseStaticFiles();
+
+app.UseRouting();
+
+app.UseCors("AllowOrigins");
 
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapControllerRoute(
+	name: "/",
+	pattern: "{*url}",
+	defaults: new { controller = "Public", action = "Index" }
+);
 
 app.Run();
