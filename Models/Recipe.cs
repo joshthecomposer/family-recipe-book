@@ -12,12 +12,10 @@ public class Recipe : BaseEntity
     public string Name { get; set; }
     [Required(ErrorMessage = "Please enter a brief description so others know what this recipe is.")]
     public string Description { get; set; }
-    
+
     //Associations
     public int UserId { get; set; }
     public User User { get; set; }
 
     public List<Ingredient> Ingredients { get; set; } = new();
-
-    //TODO: 1 to 1 relationship preview photo for the recipe.
 }

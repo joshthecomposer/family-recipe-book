@@ -199,4 +199,17 @@ public class TokenService : ITokenService
         }
         return refreshToken.UserId;
     }
+
+    public async Task<InviteToken> CreateInviteCode(string email)
+    {
+        InviteToken invite = new()
+        {
+            Email = email,
+            Value = GenerateRefreshToken()
+        };
+        await _db.InviteTokens.AddAsync(invite);
+        await _db.SaveChangesAsync();
+        return invite;
+    }
+
 }

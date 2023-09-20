@@ -9,6 +9,7 @@ public class DBContext : DbContext
     public DbSet<RefreshToken> RefreshTokens { get; set; }
     public DbSet<Recipe> Recipes { get; set; }
     public DbSet<Ingredient> Ingredients { get; set; }
+    public DbSet<InviteToken> InviteTokens { get; set; }
 
     public DBContext(DbContextOptions options) : base(options) { }
 
@@ -28,5 +29,8 @@ public class DBContext : DbContext
 
         modelBuilder.Entity<Recipe>().HasQueryFilter(u => u.IsActive);
         modelBuilder.Entity<Ingredient>().HasQueryFilter(u => u.IsActive);
+
+        modelBuilder.Entity<InviteToken>().HasQueryFilter(u => u.IsActive);
+        modelBuilder.Entity<InviteToken>().HasQueryFilter(u => u.Expiry >= DateTime.UtcNow);
     }
 }

@@ -11,7 +11,7 @@ public class RecipeController : ControllerBase
 {
     private readonly IRecipeService _recipeService;
     private readonly ITokenService _tokenService;
-    
+
     public RecipeController(IRecipeService rs, ITokenService ts)
     {
         _recipeService = rs;
