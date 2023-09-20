@@ -1,7 +1,7 @@
 function App() {
   return (
     <>
-      <h1>Hello Worlt</h1>
+      <h1>Welcome to Family Recipe DB</h1>
     </>
   )
 }
