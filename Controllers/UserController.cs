@@ -6,9 +6,6 @@ using MyApp.DataStorage;
 using MyApp.DTOs.UserDTOs;
 using MyApp.Models;
 using MyApp.Services;
-using Amazon.SimpleEmail;
-using Amazon.SimpleEmail.Model;
-using Amazon.Runtime;
 
 namespace MyApp.Controllers;
 
