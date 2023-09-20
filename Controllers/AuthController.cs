@@ -42,30 +42,30 @@ public class AuthController : ControllerBase
     [HttpPost("login")]
     public async Task<ActionResult<TokensDTO>> Login(LoginUser loginUser)
     {
-        if (!ModelState.IsValid) 
-        { 
-            return BadRequest(ModelState); 
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
         }
 
         UserDTO? validUser = await _userService.ValidateUserPassword(loginUser);
 
-        if (validUser == null) 
-        { 
-            return BadRequest("Invalid email or password"); 
+        if (validUser == null)
+        {
+            return BadRequest("Invalid email or password");
         }
 
         bool refreshTokensCleared = await _tokenService.DeactivateTokensForUserAsync(validUser.UserId);
 
-        if (refreshTokensCleared == false) 
-        { 
-            return StatusCode(500, "Error updating user tokens, try again."); 
+        if (refreshTokensCleared == false)
+        {
+            return StatusCode(500, "Error updating user tokens, try again.");
         }
 
         TokensDTO? tokens = await _tokenService.CreateTokensDTOAsync(validUser.UserId);
 
-        if (tokens == null) 
-        { 
-            return StatusCode(500, "error saving new refreshtoken to database"); 
+        if (tokens == null)
+        {
+            return StatusCode(500, "error saving new refreshtoken to database");
         }
 
         return Ok(tokens);
