@@ -1,9 +1,8 @@
 #pragma warning disable 8618
 using System.ComponentModel.DataAnnotations;
-using MyApp.CustomAnnotations;
 
-namespace MyApp.DTOs.UserDTOs;
-public class PasswordUpdateDTO
+namespace MyApp.DataTransfer.Users;
+public class PasswordUpdateDto
 {
     [Required]
     public string PrevPassword { get; set; }

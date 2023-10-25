@@ -17,20 +17,12 @@ public class DBContext : DbContext
     {
         modelBuilder.Entity<User>().HasQueryFilter(u => u.IsActive);
 
-        modelBuilder.Entity<User>(entity => {
-        entity.HasIndex(e => e.Email).IsUnique();
+        modelBuilder.Entity<RefreshToken>(entity =>
+        {
+            entity.HasIndex(e => e.Value).IsUnique();
         });
 
-        modelBuilder.Entity<RefreshToken>().HasQueryFilter(u => u.IsActive);
-
-        modelBuilder.Entity<RefreshToken>(entity => {
-        entity.HasIndex(e => e.Value).IsUnique();
-        });
-
-        modelBuilder.Entity<Recipe>().HasQueryFilter(u => u.IsActive);
-        modelBuilder.Entity<Ingredient>().HasQueryFilter(u => u.IsActive);
-
-        modelBuilder.Entity<InviteToken>().HasQueryFilter(u => u.IsActive);
         modelBuilder.Entity<InviteToken>().HasQueryFilter(u => u.Expiry >= DateTime.UtcNow);
+        modelBuilder.Entity<RefreshToken>().HasQueryFilter(u => u.Expiry >= DateTime.UtcNow);
     }
 }

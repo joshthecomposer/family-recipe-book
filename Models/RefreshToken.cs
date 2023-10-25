@@ -11,5 +11,5 @@ public class RefreshToken : BaseEntity
 
     //Associations
     public int UserId { get; set; }
-    public User User { get; set; }
+    public User? User { get; set; }
 }

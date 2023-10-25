@@ -1,16 +1,13 @@
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MyApp.DataStorage;
 using System.Security.Claims;
-using MyApp.DTOs.TokenDTOs;
-using MyApp.DTOs.UserDTOs;
 using MyApp.Models;
 using System.Security.Cryptography;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Net.Http.Headers;
-using System.Text.Json;
+using MyApp.DataTransfer.Tokens;
 
 namespace MyApp.Services;
 public class TokenService : ITokenService
@@ -68,8 +65,7 @@ public class TokenService : ITokenService
         {
             foreach (var t in tokens)
             {
-                t.IsActive = false;
-                t.DisabledAt = DateTime.UtcNow;
+                t.Expiry = DateTime.UtcNow.AddDays(-30);
                 t.UpdatedAt = DateTime.UtcNow;
             }
             await _db.SaveChangesAsync();
@@ -81,7 +77,7 @@ public class TokenService : ITokenService
         }
     }
 
-    public async Task<TokensDTO?> CreateTokensDTOAsync(int userId)
+    public async Task<TokensDto?> CreateTokensDTOAsync(int userId)
     {
         RefreshToken rft = new()
         {
@@ -95,7 +91,7 @@ public class TokenService : ITokenService
             await DeactivateTokensForUserAsync(userId);
             await _db.RefreshTokens.AddAsync(rft);
             await _db.SaveChangesAsync();
-            return new TokensDTO(rft, jwt);
+            return new TokensDto(rft, jwt);
         }
         catch (InvalidOperationException ex)
         {
@@ -114,7 +110,7 @@ public class TokenService : ITokenService
         }
     }
 
-    public async Task<TokensDTO> DoRefreshActionAsync(string rft)
+    public async Task<TokensDto> DoRefreshActionAsync(string rft)
     {
         await Task.Delay(1);
         throw new NotImplementedException();

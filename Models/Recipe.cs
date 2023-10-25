@@ -1,6 +1,5 @@
 #pragma warning disable 8618
 using System.ComponentModel.DataAnnotations;
-using MyApp.DTOs.RecipeDTOs;
 
 namespace MyApp.Models;
 public class Recipe : BaseEntity
@@ -15,7 +14,7 @@ public class Recipe : BaseEntity
 
     //Associations
     public int UserId { get; set; }
-    public User User { get; set; }
+    public User? User { get; set; }
 
-    public List<Ingredient> Ingredients { get; set; } = new();
+    public ICollection<Ingredient> Ingredients { get; set; } = new List<Ingredient>();
 }

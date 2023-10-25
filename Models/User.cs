@@ -21,6 +21,10 @@ public class User : BaseEntity
     [Compare("Password")]
     public string Confirm { get; set; }
 
-    public List<RefreshToken> RefreshTokens { get; set; } = new();
-    public List<Recipe> Recipes { get; set; } = new();
+    public DateTime? DisabledAt { get; set; }
+    public bool IsActive { get; set; } = true;
+
+    public ICollection<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
+    public ICollection<Recipe> Recipes { get; set; } = new List<Recipe>();
+    public ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
 }

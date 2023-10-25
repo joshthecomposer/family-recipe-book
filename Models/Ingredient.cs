@@ -12,5 +12,5 @@ public class Ingredient : BaseEntity
 
     //Associations
     public int RecipeId { get; set; }
-    public Recipe Recipe { get; set; }
+    public Recipe? Recipe { get; set; }
 }

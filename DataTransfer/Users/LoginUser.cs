@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using MyApp.CustomAnnotations;
 
-namespace MyApp.DTOs.UserDTOs;
+namespace MyApp.DataTransfer.Users;
 public class LoginUser
 {
     [Required]

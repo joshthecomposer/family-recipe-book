@@ -1,18 +1,18 @@
 using MyApp.DataStorage;
-using MyApp.DTOs.RecipeDTOs;
+using MyApp.DataTransfer.Recipes;
 using MyApp.Models;
 
 namespace MyApp.Services;
 public class RecipeService :IRecipeService
 {
     private readonly DBContext _db;
-    
+
     public RecipeService(DBContext db)
     {
         _db = db;
     }
 
-    public async Task CreateAsync(RecipeNoUserIdDTO recipe, int userId)
+    public async Task CreateAsync(RecipeNoUserId recipe, int userId)
     {
         Recipe ingoing = new()
         {

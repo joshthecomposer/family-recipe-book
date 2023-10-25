@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MyApp.DataStorage;
-using MyApp.DTOs.UserDTOs;
+using MyApp.DataTransfer.Users;
 using MyApp.Models;
 
 namespace MyApp.Services;
@@ -14,13 +14,13 @@ public class UserService : IUserService
         _db = db;
     }
 
-    public async Task<UserDTO?> GetByIdAsync(int id)
+    public async Task<UserDto?> GetByIdAsync(int id)
     {
         User? user = await _db.Users.FindAsync(id);
 
         if (user == null) return null;
 
-        return new UserDTO(user);
+        return new UserDto(user);
     }
 
     public async Task<bool> CreateAsync(User user)
@@ -44,7 +44,7 @@ public class UserService : IUserService
         return user;
     }
 
-    public async Task<UserDTO?> ValidateUserPassword(LoginUser loginUser)
+    public async Task<UserDto?> ValidateUserPassword(LoginUser loginUser)
     {
         User? check = await _db.Users.Where(u => u.Email == loginUser.Email).FirstOrDefaultAsync();
 
@@ -54,10 +54,10 @@ public class UserService : IUserService
 
         if (hasher.VerifyHashedPassword(loginUser, check.Password, loginUser.Password) == 0) return null;
 
-        return new UserDTO(check);
+        return new UserDto(check);
     }
 
-    public async Task<UserDTO?> UpdatePasswordAsync(PasswordUpdateDTO passUpdate, int userId)
+    public async Task<UserDto> UpdatePasswordAsync(PasswordUpdateDto passUpdate, int userId)
     {
         User? oldUser = await _db.Users.FindAsync(userId);
         if (oldUser == null)
@@ -73,7 +73,7 @@ public class UserService : IUserService
         try
         {
             await _db.SaveChangesAsync();
-            return new UserDTO(oldUser);
+            return new UserDto(oldUser);
         }
         catch
         {

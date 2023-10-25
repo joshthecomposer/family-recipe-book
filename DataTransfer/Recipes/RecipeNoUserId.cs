@@ -1,8 +1,8 @@
 #pragma warning disable 8618
 using System.ComponentModel.DataAnnotations;
 
-namespace MyApp.DTOs.RecipeDTOs;
-public class RecipeNoUserIdDTO
+namespace MyApp.DataTransfer.Recipes;
+public class RecipeNoUserId
 {
     [Required]
     [MinLength(5)]

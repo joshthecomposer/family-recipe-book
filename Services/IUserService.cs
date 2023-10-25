@@ -1,12 +1,11 @@
-using MyApp.DTOs.TokenDTOs;
-using MyApp.DTOs.UserDTOs;
+using MyApp.DataTransfer.Users;
 using MyApp.Models;
 namespace MyApp.Services;
 public interface IUserService
 {
     Task<bool> CreateAsync(User user);
     Task<User?> DeactivateUserByIdAsync(int id);
-    Task<UserDTO?> GetByIdAsync(int id);
-    Task<UserDTO?> ValidateUserPassword(LoginUser loginUser);
-    Task<UserDTO?> UpdatePasswordAsync(PasswordUpdateDTO passUpdate, int userId);
+    Task<UserDto?> GetByIdAsync(int id);
+    Task<UserDto?> ValidateUserPassword(LoginUser loginUser);
+    Task<UserDto> UpdatePasswordAsync(PasswordUpdateDto passUpdate, int userId);
 }

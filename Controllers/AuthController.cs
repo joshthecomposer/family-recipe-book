@@ -1,8 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using MyApp.DataStorage;
-using MyApp.DTOs.TokenDTOs;
-using MyApp.DTOs.UserDTOs;
+using MyApp.DataTransfer.Tokens;
+using MyApp.DataTransfer.Users;
 using MyApp.Models;
 using MyApp.Services;
 
@@ -40,14 +38,14 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("login")]
-    public async Task<ActionResult<TokensDTO>> Login(LoginUser loginUser)
+    public async Task<ActionResult<TokensDto>> Login(LoginUser loginUser)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
 
-        UserDTO? validUser = await _userService.ValidateUserPassword(loginUser);
+        UserDto? validUser = await _userService.ValidateUserPassword(loginUser);
 
         if (validUser == null)
         {
@@ -61,7 +59,7 @@ public class AuthController : ControllerBase
             return StatusCode(500, "Error updating user tokens, try again.");
         }
 
-        TokensDTO? tokens = await _tokenService.CreateTokensDTOAsync(validUser.UserId);
+        TokensDto? tokens = await _tokenService.CreateTokensDTOAsync(validUser.UserId);
 
         if (tokens == null)
         {
@@ -72,14 +70,14 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("refresh")]
-    public async Task<ActionResult<TokensDTO>> DoRefreshActionAsync(RefreshRequestDTO rft)
+    public async Task<ActionResult<TokensDto>> DoRefreshActionAsync(RefreshRequestDTO rft)
     {
         int checkValue = await _tokenService.ValidateRefreshTokenAsync(rft.Rft);
         if (checkValue < 1)
         {
             return Unauthorized("Token not found.");
         }
-        TokensDTO? tokens = await _tokenService.CreateTokensDTOAsync(checkValue);
+        TokensDto? tokens = await _tokenService.CreateTokensDTOAsync(checkValue);
         if (tokens == null)
         {
             return StatusCode(500, "Something went wrong creating the TokensDTO");
